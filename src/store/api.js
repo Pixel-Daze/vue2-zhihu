@@ -58,7 +58,7 @@ export function fetchItemsByDate(date) {
 
 /*主题查看*/
 export function fetchThemes(){
-	return fetch(`theme`);
+	return fetch(`themes`);
 }
 
 /*获取主题*/
@@ -67,6 +67,6 @@ export function fetchTheme(id) {
 }
 
 /*获取图片*/
-export function gitPicUrl(img){
+export function getPicUrl(img){
 	return API_ROOT+`pic?img=${img}`
 }

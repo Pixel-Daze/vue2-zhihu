@@ -5,7 +5,8 @@
 			<router-link v-if="pagePrev" :to="'/' + pagePrev">&nbsp;&lt;&nbsp;</router-link>
 			<a v-else class="disabled">&nbsp;&lt;&nbsp;</a>
 			<span>{{date}}</span>
-			<a class="disabled">&nbsp;&gt;&nbsp;</a>
+			<router-link v-if="pageNext" :to="'/'+pageNext">&nbsp;&gt;&nbsp;</router-link>
+			<a v-else class="disabled">&nbsp;&gt;&nbsp;</a>
 		</div>
 
 	</div>
@@ -13,6 +14,7 @@
 <script>
 	import Spinner from './Spinner'
 	import moment from 'moment'
+	import {mapGetters} from 'vuex'
 	export default{
 		components:{
 			Spinner
@@ -21,25 +23,36 @@
 			const isInitialRender = !this.$root._isMounted;
 			return {
 				loading:false,
-				transition:'slide-left'
+				transition:'slide-left',
+				displayedDate: isInitialRender ? this.date : -1,
+        		displayedItems: isInitialRender ? this.$store.getters.activeSimpleItems : []
 			}
 		},
 		methods:{
 			loadItems(to=this.date,from=-1){
+				console.log('current Time:'+this.date)
 				//如果参数日期大于今天，让路由替换到今天
 				if(this.date>this.today){
 					this.$router.replace(`/${this.date}`);
 				}
 				this.loading=true;
+				this.$store.dispatch('FETCH_DATE_ITEM_LIST_DATA', {date: this.date})
 			}
 		},
 		computed:{
+			...mapGetters([
+				'activeDate'
+			]),
 			date(){
-				return this.$store.state.route.params.date||this.today;
+				return  this.$route.params.date||this.today
 			},
 			pagePrev(){
-				const prev = moment(this.date).subtract(1,'days').format('YYYYMMDD');
+				const prev = moment(this.activeDate).subtract(1,'days').format('YYYYMMDD');
 				return prev < 20130519 ? null : prev;
+			},
+			pageNext(){
+				const next = moment(this.activeDate).add(1,'days').format('YYYYMMDD')
+				return next>this.today?null:next;
 			},
 			today(){
 				return moment().format('YYYYMMDD');
@@ -56,10 +69,11 @@
 	      console.log(this.$root)
 	    },
 	    watch: {
+	    	/*神密的检测方式watch*/
 	      date (to, from) {
 	        this.loadItems(to, from)
 	      }
-	    }
+	    },
 	}
 </script>
 <style lang="stylus">

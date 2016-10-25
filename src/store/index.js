@@ -16,12 +16,23 @@ const store = new Vuex.Store({
 	},
 
 	actions:{
-		
+		FETCH_DATE_ITEM_LIST_DATA:({commit,dispatch,state} , {date}={date:commit().format('YYYYMMDD')})=>{
+			commit('SET_ACTIVE_DATE',{date});//提交mutations
+			return api.fetchItemsByDate(date)
+				.then(body=>Promise.resolve(body.stories))
+				.then(stories=>{
+					commit('SET_DATE_ITEM_LIST',{date,stories})
+				})
+		}
+
 	},
 
 	mutations:{
 		SET_ACTIVE_DATE:(state,{date})=>{
 			state.activeDate=date;
+		},
+		SET_DATE_ITEM_LIST:(state,{date,stories})=>{
+			state.dateItemLists[date] = stories
 		}
 	},
 
