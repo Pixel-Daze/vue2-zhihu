@@ -10,7 +10,14 @@
     "server": "node ./server/app.js"
   },
   "dependencies": {
-    "vue": "^2.0.1"
+    "moment": "^2.15.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.3.1",
+    "vue": "^2.0.1",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.0.1",
+    "vuex": "^2.0.0",
+    "vuex-router-sync": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
