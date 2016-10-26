@@ -23,6 +23,14 @@ const store = new Vuex.Store({
 				.then(stories=>{
 					commit('SET_DATE_ITEM_LIST',{date,stories})
 				})
+		},
+		FETCH_TOP_STORIES_DATA:({commit,dispatch,state})=>{
+			return api.fetchLatest()
+				.then(body=>Promise.resolve(body.top_stories))
+				.then((top_stories)=>{
+					commit('SET_TOP_STORIES',{top_stories});
+
+				})
 		}
 
 	},
@@ -33,12 +41,18 @@ const store = new Vuex.Store({
 		},
 		SET_DATE_ITEM_LIST:(state,{date,stories})=>{
 			state.dateItemLists[date] = stories
+		},
+		SET_TOP_STORIES:(state,{top_stories})=>{
+			state.topStories=top_stories
 		}
 	},
 
 	getters:{
 		activeDate(state){
 			return state.activeDate;
+		},
+		activeTopStories(state){
+			return state.topStories.map(item => ({id: item.id, src: item.image, title: item.title, alt: item.title}))
 		}
 	}
 })

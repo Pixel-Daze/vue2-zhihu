@@ -15,8 +15,8 @@ function fetch(child) {
 /*获取最新的消息*/
 export function fetchLatest(){
 	return fetch('news/latest').then((response)=>{
-		response.stories.forEach((item)=>item.images = item.images.map((img)=>getPiUrl(img)))
-		response.top_stories.forEach((item)=>item.image = getPiUrl(item.image))
+		response.stories.forEach((item)=>item.images = item.images.map((img)=>getPicUrl(img)))
+		response.top_stories.forEach((item)=>item.image = getPicUrl(item.image))
 		return response
 	})
 }

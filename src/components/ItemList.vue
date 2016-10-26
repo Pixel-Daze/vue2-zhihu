@@ -8,16 +8,23 @@
 			<router-link v-if="pageNext" :to="'/'+pageNext">&nbsp;&gt;&nbsp;</router-link>
 			<a v-else class="disabled">&nbsp;&gt;&nbsp;</a>
 		</div>
-
+		<top-item-slider></top-item-slider>
+		<transition :name="transition">
+			<div class="news-list" :key="displayedDate" v-if="disabledDate>0">
+				<transition-group tag="ul" name="item"></transition-group>
+			</div>
+		</transition>
 	</div>
 </template>
 <script>
 	import Spinner from './Spinner'
+	import TopItemSlider from './TopItemSlider'
 	import moment from 'moment'
 	import {mapGetters} from 'vuex'
 	export default{
 		components:{
-			Spinner
+			Spinner,
+			TopItemSlider
 		},
 		data(){
 			const isInitialRender = !this.$root._isMounted;
@@ -25,7 +32,7 @@
 				loading:false,
 				transition:'slide-left',
 				displayedDate: isInitialRender ? this.date : -1,
-        		displayedItems: isInitialRender ? this.$store.getters.activeSimpleItems : []
+        displayedItems: isInitialRender ? this.$store.getters.activeSimpleItems : []
 			}
 		},
 		methods:{
@@ -55,7 +62,7 @@
 				return next>this.today?null:next;
 			},
 			today(){
-				return moment().format('YYYYMMDD');
+				return moment().format('YYYYMMDD');/*获取当前的时间*/
 			}
 		},
 		mounted(){
@@ -66,7 +73,6 @@
 	      if (this.$root._isMounted) {
 	        console.log('_isMounted')
 	      }
-	      console.log(this.$root)
 	    },
 	    watch: {
 	    	/*神密的检测方式watch*/
