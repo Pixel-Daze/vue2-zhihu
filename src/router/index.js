@@ -8,7 +8,7 @@ import moment from 'moment';
 Vue.use(Router);
 
 import ItemList from '../components/ItemList';
-import ItemView from '../views/ItemView';
+import ItemView from '../components/ItemView';
 
 /*history模式，需要后端配置，我们的配合文件是.htaccess
 这边的路由采取正则匹配模式，匹配日期和数字id*/

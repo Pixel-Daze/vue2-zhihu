@@ -31,6 +31,20 @@ const store = new Vuex.Store({
 					commit('SET_TOP_STORIES',{top_stories});
 
 				})
+		},
+		FETCH_ITEMS:({commit,state},{ids})=>{
+			ids = ids.filter(id=>!state.items[id]) ;
+			if(ids.length){
+				return api.fetchItems(ids)
+					.then(items => commit('SET_ITEMS', {items}))
+			}
+		},
+		FETCH_ITEM_COMMENTS:({commit,state},{id})=>{
+			return state.comments[id]
+					?Promise.resolve(state.comments[id])
+					:api.fetchItemComments(id).then(
+						(response) => {commit('SET_ITEM_COMMENTS', {id, comments: response.comments})}
+					)
 		}
 
 	},
@@ -42,8 +56,18 @@ const store = new Vuex.Store({
 		SET_DATE_ITEM_LIST:(state,{date,stories})=>{
 			state.dateItemLists[date] = stories
 		},
+		SET_ITEMS: (state, {items}) => {
+	      items.forEach(item => {
+	        if (item) {
+	          Vue.set(state.items, item.id, item)
+	        }
+	      })
+	    },
 		SET_TOP_STORIES:(state,{top_stories})=>{
 			state.topStories=top_stories
+		},
+		SET_ITEM_COMMENTS:(state,{id,comments})=>{
+			state.comments[id]=comments
 		}
 	},
 
@@ -53,6 +77,15 @@ const store = new Vuex.Store({
 		},
 		activeTopStories(state){
 			return state.topStories.map(item => ({id: item.id, src: item.image, title: item.title, alt: item.title}))
+		},
+		activeSimpleItems(state){
+			// es6对象的解构赋值
+			const {activeDate,dateItemLists} = state;
+			if(activeDate){
+				return dateItemLists[activeDate]
+			}else{
+				return []
+			}
 		}
 	}
 })

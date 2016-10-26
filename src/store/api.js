@@ -23,9 +23,10 @@ export function fetchLatest(){
 /*获取具体内容*/
 export function fetchItem(id){
 	return fetch(`news?id=${id}`).then((item)=>{
-		item.body = item.body.replace(/src="http/g,'src"'+getPiUrl('http'))
-		item.image = getPiUrl(item.image);
-		item.images = item.images.map((img)=>getPiUrl(img));
+		item.body = item.body.replace(/src="http/g,'src"'+getPicUrl('http'))
+		item.image = getPicUrl(item.image);
+		item.images = item.images.map((img)=>getPicUrl(img));
+		return item
 	})
 }
 

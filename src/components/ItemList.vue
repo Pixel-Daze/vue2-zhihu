@@ -10,8 +10,10 @@
 		</div>
 		<top-item-slider></top-item-slider>
 		<transition :name="transition">
-			<div class="news-list" :key="displayedDate" v-if="disabledDate>0">
-				<transition-group tag="ul" name="item"></transition-group>
+			<div class="news-list" :key="displayedDate" v-if="displayedDate>0">
+				<transition-group tag="ul" name="item">
+					<item v-for="item in displayedItems" :key="item.id" :item="item"></item>
+				</transition-group>
 			</div>
 		</transition>
 	</div>
@@ -19,12 +21,14 @@
 <script>
 	import Spinner from './Spinner'
 	import TopItemSlider from './TopItemSlider'
+	import Item from './Item'
 	import moment from 'moment'
 	import {mapGetters} from 'vuex'
 	export default{
 		components:{
 			Spinner,
-			TopItemSlider
+			TopItemSlider,
+			Item
 		},
 		data(){
 			const isInitialRender = !this.$root._isMounted;
@@ -32,7 +36,7 @@
 				loading:false,
 				transition:'slide-left',
 				displayedDate: isInitialRender ? this.date : -1,
-        displayedItems: isInitialRender ? this.$store.getters.activeSimpleItems : []
+        		displayedItems: isInitialRender ? this.$store.getters.activeSimpleItems : []
 			}
 		},
 		methods:{
@@ -44,6 +48,11 @@
 				}
 				this.loading=true;
 				this.$store.dispatch('FETCH_DATE_ITEM_LIST_DATA', {date: this.date})
+					.then(()=>{
+						this.displayedDate= this.date
+						this.displayedItems=this.$store.getters.activeSimpleItems
+						this.loading=false
+					})
 			}
 		},
 		computed:{

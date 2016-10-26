@@ -1,11 +1,25 @@
 <template>
 	<li class="news-item">
 		<span class="title">
-			
+			<router-link :to="'/story/'+item.id">{{item.title}}</router-link>
 		</span>
+    <br>
+    <span class="image" v-if="item.images">
+      <router-link :to="'/story/'+item.id"><img :src="item.images[0]"></router-link>
+    </span>
 	</li>
 </template>
-
+<script>
+  export default {
+    name:'news-item',
+    props:{
+      item:{
+        type:Object,
+        required:true
+      }
+    }
+  }
+</script>
 <style lang="stylus">
   .news-item
     background-color #fff
