@@ -3,6 +3,8 @@ var server = http.createServer();
 var url = require("url");
 var querystring = require("querystring");
 server.on('request', function (req, res) {
+
+  console.log(req)
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');

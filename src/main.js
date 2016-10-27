@@ -12,6 +12,29 @@ import moment from 'moment'
 // sync(store,router)
 
 Vue.use(VueResource)
+Vue.http.interceptors.push((request, next)  =>{
+	// Vue.http.options.AuthKey = 'ssh';
+	var a= true;
+	if(a){
+		request.method='GET'
+		request.headers.set('AuthKey','ssh');
+		// request.headers.common['AuthKey']='ssh';
+	}
+	
+	console.log(request)
+	
+	next((response) => {
+	    console.log(response.status)
+	    console.log(response.body )
+	    return response
+	});
+   
+});
+
+
+
+
+
 
 moment.locale('zh-CN')
 
